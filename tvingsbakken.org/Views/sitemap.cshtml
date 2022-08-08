@@ -1,31 +1,45 @@
-﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+﻿@using Umbraco.Cms.Core.Models.PublishedContent;
+@using System.Globalization;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage;
 @{
     Layout = null;
     Context.Response.ContentType = "text/xml";
-    IPublishedContent siteHomePage = Model.Root();
-    IPublishedContent media = Umbraco.MediaAtRoot();
-    //var mediaFolder = media.FirstOrDefault(x => x.Name.InvariantEquals("dokumenter"));
+    var siteHomePage = Model.Root();
+    var media = Umbraco.MediaAtRoot();
+    var mediaFolder = media.FirstOrDefault(x => x.Name.InvariantEquals("dokumenter"));
 }<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" ml-update="aware" ml-stage="preload">
-
+    @{
+        RenderSiteMapUrl(siteHomePage, 1.00);
+        RenderSiteMapUrl(mediaFolder, 1.00);
+    }
 </urlset>
 
-@*@functions
+@functions
 {
-    private async Task RenderSiteMapUrl(IPublishedContent siteMapPage, double priority)
+    private void RenderSiteMapUrl(IPublishedContent siteMapPage, double priority)
     {
-        if ((siteMapPage.HasProperty("noIndex") && !siteMapPage.Value<bool>("noIndex")) || siteMapPage.HasProperty("umbracoExtension"))
+        try
+        {
+            if ((siteMapPage.HasProperty("noIndex") && !siteMapPage.Value<bool>("noIndex")) || siteMapPage.HasProperty("umbracoExtension"))
+            {
+<url>
+    <loc>@(siteMapPage.Url(mode: UrlMode.Absolute))</loc>
+    <lastmod>@(string.Format("{0:s}+00:00", siteMapPage.UpdateDate))</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>@priority.ToString("F2", CultureInfo.CreateSpecificCulture("en-US"))</priority>
+</url>
+            }
+            foreach (IPublishedContent page in siteMapPage.Children)
+            {
+                RenderSiteMapUrl(page, 0.8 * priority);
+            }
+        }
+        catch(Exception ex)
         {
             <url>
-                <loc>@(siteMapPage.Url(mode: UrlMode.Absolute))</loc>
-                <lastmod>@(string.Format("{0:s}+00:00", siteMapPage.UpdateDate))</lastmod>
-                <changefreq>weekly</changefreq>
-                <priority>@priority.ToString("F2", CultureInfo.CreateSpecificCulture("en-US"))</priority>
+                @ex.Message
             </url>
         }
-        foreach (IPublishedContent page in siteMapPage.Children)
-        {
-            @RenderSiteMapUrl(page, 0.8 * priority);
-        }
     }
-}*@
+}
 

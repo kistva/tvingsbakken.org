@@ -1,0 +1,48 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Home>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+    Layout = "Master.cshtml";
+    var carouselItems = Model.Value<IList<Umbraco.Cms.Web.Common.PublishedModels.Picture>>("Carousel"); //.Select(p => new Picture(p)).ToList();
+    var i = 0;
+}
+<script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "Organization",
+        "url": "https://tvingsbakken.org/",
+        "email": "tvingsbakken.bestyrelsen(at)gmail.com",
+        "name": "Grundejerforeningen Tvingsbakken",
+        "address": {
+        "@@type": "PostalAddress",
+        "streetAddress": "Tvingsbakken 29",
+        "postalCode": "3200",
+        "addressLocality": "Helsinge"
+        },
+        "logo": "https://www.tvingsbakken.org/assets/images/logo.svg"
+    }
+</script>
+<section>
+    @foreach (var p in carouselItems)
+    {
+        string image = (p.Image != null) ? p.Image.GetCropUrl() : "";
+        <div class="frontpage" style="background-image: url(@image)">
+            <div class="frontpage-caption">
+                <div class="wow fadeInUp">
+                    <h1>@p.Title</h1>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+<div class="grid-section">
+    <div>
+        <div class="row clearfix">
+            <div class="cols-1 column">
+                <div>
+                    @Html.Partial("~/Views/Partials/LatestBlogposts.cshtml", Model)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

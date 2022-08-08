@@ -1,0 +1,81 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core;
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Gallery>
+
+@{
+    Layout = "Master.cshtml";
+
+
+    //var galleryFilterRoot =  GetDictionaryItemByKey("GalleryFilter");
+    //var galleryFilters = Services.LocalizationService.GetDictionaryItemChildren(galleryFilterRoot.Key);
+    //galleryFilters = galleryFilters.OrderBy(x => x.ItemKey);
+
+    Dictionary<string, string> galleryFilters = new Dictionary<string, string>();
+    galleryFilters.Add("all", "Alle");
+    galleryFilters.Add("area", "Området");
+    galleryFilters.Add("road", "Vejen");
+    galleryFilters.Add("wood", "Skoven");
+
+    var imageGallery = Model.Children();
+}
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="cols-1">
+                <div class="title">
+                    <div class="wow bounceIn">
+                        <h1 class="section-heading animated" data-animation="bounceInUp">@Model.PageTitle</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="myModal" class="modal">
+            <div id="caption"></div>
+            <span class="close"></span>
+            <img class="modal-content" id="modalImg">
+        </div>
+
+        <div class="row">
+            <ul class="filters">
+                @foreach (var galleryFilter in galleryFilters)
+                {
+                    <li><a href="#" class="filter btn-small@(galleryFilter.Key == "all" ? " current": "")" data-filter="@galleryFilter.Key">@Html.Raw(galleryFilter.Value)</a></li>
+                }
+
+            </ul>
+            @if (imageGallery.Any())
+            {
+                <div class="cols-1">
+                    <div class="row">
+                        <div class="gallery-images">
+                            @foreach (ContentModels.GalleryImage picture in imageGallery)
+                            {
+                                string dateTaken = ((picture.Value<DateTime>("dateTaken") != null) ? picture.Value<DateTime>("dateTaken").ToString("dd-MM-yyyy") : "");
+                                string imageTitle = $"{picture.Title} - Fotograf: {picture.Photograph} - {dateTaken}";
+                                string filter = "";
+                                foreach (var type in picture.Value<string[]>("filter"))
+                                {
+                                    filter += " " + type;
+                                }
+
+                                filter = filter.Substring(1);
+
+                                @* Issue with the imageSharper and prefix sizes & -> &amp; double escape *@
+                                var thumbUrl = picture.GetCropUrl("image", "thumb").Replace("&", "&amp;");
+                                var fullUrl = picture.GetCropUrl("image", "full").Replace("&", "&amp;");
+
+                                <div class="gallery-image" data-filter="@filter">
+                                    <div class="gallery-item">
+                                        <img class="Image" src="@thumbUrl" alt="@Html.Raw(imageTitle)" data="@fullUrl" />
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

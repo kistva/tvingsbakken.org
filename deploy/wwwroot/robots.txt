@@ -1,0 +1,3 @@
+Sitemap: https://tvingsbakken.org/xmlsitemap
+User-agent: *
+Crawl-delay: 10

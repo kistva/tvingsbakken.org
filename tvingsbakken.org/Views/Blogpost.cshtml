@@ -1,0 +1,75 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Microsoft.AspNetCore.Http.Extensions;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Blogpost>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+    Layout = "Master.cshtml";
+    var location = new Uri($"{Context.Request.Scheme}://{Context.Request.Host}");
+    var baseUrl = location.AbsoluteUri;
+    var someImage = Model.Value("someImage");
+    string someImageJSON = "";
+    DateTime publishDate = Model.Value<DateTime>("publishDate");
+    if (someImage is Image image)
+    {
+        someImageJSON = $"\"image\": [\"{baseUrl}{image.Url()}\"],";
+    }
+
+}
+<script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "NewsArticle",
+      "mainEntityOfPage": {
+        "@@type": "WebPage",
+        "@@id": "@baseUrl"
+      },
+      "headline": "@Html.Raw(Model.Name)",
+      @Html.Raw(someImageJSON)
+      "datePublished": "@publishDate.ToString("o")",
+      "dateModified": "@publishDate.ToString("o")",
+      "author": {
+        "@@type": "Person",
+        "name": "Bestyrelsen"
+      },
+      "publisher": {
+        "@@type": "Organization",
+        "name": "Grundejerforeningen Tvingsbakken",
+        "logo": {
+          "@@type": "ImageObject",
+          "url": "https://www.tvingsbakken.org/assets/images/logo.svg"
+        }
+      }
+    }
+</script>
+<section class="section appear clearfix">
+    <div class="container">
+        <div class="row mar-bot40">
+            <div class="cols-1">
+                <div class="title">
+                    <div class="wow bounceIn">
+                        <h1 class="section-heading animated">@Html.Raw(Model.Name)</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="blogpost-meta">
+                <div class="blog-date">
+                    <div class="blog-date-day">@publishDate.ToString("dd").</div>
+                    <div class="blog-date-month">@publishDate.ToString("MMM")</div>
+                    <div class="blog-date-year">@publishDate.ToString("yyyy")</div>
+                </div>
+                <span class="blogpost-cat">
+                    @Html.Partial("~/Views/Partials/CategoryLinks.cshtml", Model.Value<string[]>("categories"))
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="cols-1">
+                <div class="mar-left10">
+                    @Html.GetGridHtml(Model, "bodyText", "minimal")
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,30 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Newtonsoft.Json;
+@using Newtonsoft.Json.Linq;
+@inherits UmbracoViewPage;
+@{
+    Layout = null;
+    var language = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+
+    // cache buster
+    string file = @"wwwroot\assets\cachebusting.json";
+    string Json = System.IO.File.ReadAllText(file);
+    var json = (JObject)JsonConvert.DeserializeObject(Json);
+    var cacheBustingId = json["id"];
+
+    var scriptUrl = "/assets/scripts/js.min." + cacheBustingId + ".js";
+}<!doctype html>
+<html lang="@language" class="no-js">
+<head>
+@Html.Partial("~/Views/Partials/HtmlHeader.cshtml", Model)
+</head>
+<body>
+  @Html.Partial("~/Views/Partials/TopNavigation.cshtml", Model)
+  <main>
+  @RenderBody()
+  </main>
+  @Html.Partial("~/Views/Partials/Footer.cshtml")
+  <script src="@scriptUrl"></script>
+</body>
+</html>

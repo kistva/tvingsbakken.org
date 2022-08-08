@@ -1,0 +1,37 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage;
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@using Umbraco.Cms.Web;
+@{
+    var site = (Home)Model.Root();
+    var selection = site.Children.Where(x => x.IsVisible());
+}
+
+<header id="Header" class="maximized">
+    <a href="/" class="logo" id="Logo">
+        <img src="/assets/images/logo-white.svg" alt="Logo" width="247" height="45" />
+    </a>
+    <nav>
+        <ul class="menu" id="Menu">
+            <li class="@Html.Raw(Model.Id == site.Id ? "active" : "")">
+                <a href="/">Hjem</a>
+            </li>
+            @foreach (var item in selection)
+            {
+                if (item.HasProperty("umbracoNavihide") && !item.Value<bool>("umbracoNavihide"))
+                {
+                    <li @(item.IsAncestorOrSelf(Model) ? "class=active" : "")>
+                        <a href="@item.Url()">@Html.Raw(item.Name)</a>
+                    </li>
+                }
+            }
+        </ul>
+    </nav>
+    <div class="menuburger" id="BurgerMenu">
+        <span class="burger">
+            <i></i>
+        </span>
+    </div>
+</header>

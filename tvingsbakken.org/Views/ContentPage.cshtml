@@ -1,0 +1,26 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.ContentPage>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+    Layout = "Master.cshtml";
+}
+<section>
+    <div class="container">
+        <div class="row mar-bot40">
+            <div class="cols-1">
+                <div class="title">
+                    <div class="wow bounceIn">
+                        <h1 class="section-heading animated">@Html.Raw(Model.PageTitle)</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="cols-1">
+                <div class="mar-left10">
+                    @Html.GetGridHtml(Model, "bodyText", "minimal")
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

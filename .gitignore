@@ -1,4 +1,6 @@
+deploy/
 frontend/node_modules/
 tvingsbakken.org/wwwroot/assets/
-deploy/wwwroot/umbraco/
-deploy/wwwroot/assets/
+tvingsbakken.org/wwwroot/umbraco/
+
+

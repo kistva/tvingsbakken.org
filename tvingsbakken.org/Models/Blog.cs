@@ -9,6 +9,5 @@ namespace tvingsbakken.org.Models
         public string Text { get; set; }
         public string Url { get; set; }
         public string AltTitle { get; set; }
-
     }
 }

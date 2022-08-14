@@ -776,6 +776,49 @@ cursor: pointer;
     display: block;
 }
 
+.blog-up
+{ 
+	position:relative;
+	animation:animateBlogsUp 0.8s
+}
+
+.blog-hide
+{ 
+	opacity: 0;;
+}
+
+@keyframes animateBlogsUp
+{
+	from{
+		bottom:0px;
+		opacity:1
+	} 
+	to
+	{
+		bottom: -300px;
+		opacity:0;
+	}
+}
+
+.blog-down
+{ 
+	position:relative;
+	animation:animateBlogsDown 0.8s
+}
+@keyframes animateBlogsDown
+{
+	from{
+		bottom:-300px;
+		opacity:0
+	} 
+	to
+	{
+		bottom:0;
+		opacity:1;
+	}
+}
+
+
 section {
 	position: relative;
 	clear: both;

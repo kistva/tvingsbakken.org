@@ -1,11 +1,8 @@
-﻿using System;
+﻿namespace tvingsbakken.org.Models;
 
-namespace tvingsbakken.org.Models
+public class Blogs
 {
-    public class Blogs
-    {
-        public List<Blog> Result { get; set; } = new List<Blog>();
-        public int Total { get; set; } = 0;
-        public int NumberOfPages { get; set; } = 0;
-    }
+    public List<Blog> Result { get; set; } = new List<Blog>();
+    public int Total { get; set; } = 0;
+    public int NumberOfPages { get; set; } = 0;
 }

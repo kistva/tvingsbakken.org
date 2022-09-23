@@ -63,8 +63,8 @@
                                 filter = filter.Substring(1);
 
                                 @* Issue with the imageSharper and prefix sizes & -> &amp; double escape *@
-                                var thumbUrl = picture.GetCropUrl("image", "thumb").Replace("&", "&amp;");
-                                var fullUrl = picture.GetCropUrl("image", "full").Replace("&", "&amp;");
+                                var thumbUrl = picture.GetCropUrl("image", "thumb");
+                                var fullUrl = picture.GetCropUrl("image", "full");
 
                                 <div class="gallery-image" data-filter="@filter">
                                     <div class="gallery-item">

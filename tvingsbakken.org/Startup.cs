@@ -41,14 +41,14 @@ public class Startup
         {
             options.OnParseCommandsAsync = c =>
             {
-                if (c.Context != null)
+                if (c.Context is not null)
                 {
                     if (c.Context.Request.GetTypedHeaders().Accept
                             .Any(aValue => aValue.MediaType.Value == "image/webp"))
                     {
                         var path = c.Context.Request.Path.ToString();
 
-                        if (!c.Commands.Contains("webp") || !c.Commands.Contains("noformat") && path.EndsWith("png") || path.EndsWith("jpg") || path.EndsWith("jpeg"))
+                        if (!c.Commands.Contains("webp") || !c.Commands.Contains("noformat") && path.EndsWith(".png") || path.EndsWith(".jpg") || path.EndsWith(".jpeg"))
                         {
                             c.Commands.Remove("format");
                             c.Commands.Add("format", "webp");
@@ -56,6 +56,7 @@ public class Startup
                         }
                     }
                 }
+
                 bool doesntWantFormat = c.Commands.TryGetValue("noformat", out string value);
 
                 if (doesntWantFormat)

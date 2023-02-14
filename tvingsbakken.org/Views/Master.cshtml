@@ -6,6 +6,10 @@
 @{
     Layout = null;
     var language = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    var currentUrl = UmbracoContext.CleanedUmbracoUrl.AbsoluteUri;
+    Uri currentUri = new Uri(currentUrl);
+    var baseUrl = $"{currentUri.Scheme}://{currentUri.Authority}";
+
 
     // cache buster
     string file = @"wwwroot//assets//cachebusting.json";
@@ -13,7 +17,7 @@
     var json = (JObject)JsonConvert.DeserializeObject(Json);
     var cacheBustingId = json["id"];
 
-    var scriptUrl = "/assets/scripts/js.min." + cacheBustingId + ".js";
+    var scriptUrl = baseUrl + "/assets/scripts/js.min." + cacheBustingId + ".js";
 }<!doctype html>
 <html lang="@language" class="no-js">
 <head>

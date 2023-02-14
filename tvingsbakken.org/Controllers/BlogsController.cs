@@ -31,14 +31,18 @@ public class BlogsController : UmbracoApiController
         var blogs = blogRoot.Children;
         foreach (var blog in blogs)
         {
-            var blogItem = new Blog();
-            blogItem.PublishDate = blog.Value<DateTime>("publishDate");
-            blogItem.Title = blog.Value<string>("pageTitle");
-            blogItem.AltTitle = blog.Value<string>("browserTitle");
-            blogItem.Text = blog.Value<string>("excerpt");
-            blogItem.Url = blog.Url();
+            var blogItem = new Blog()
+            {
+                PublishDate = blog.Value<DateTime>("publishDate"),
+                Title = blog?.Value<string>("pageTitle") ?? "",
+                AltTitle = blog?.Value<string>("browserTitle") ?? "",
+                Text = blog?.Value<string>("excerpt") ?? "",
+                Url = blog.Url() ?? ""
+            };
             result.Result.Add(blogItem);
         }
+
+        
 
         if(result.Result.Any())
         {

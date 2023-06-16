@@ -5,6 +5,28 @@
     Layout = "Master.cshtml";
     var carouselItems = Model.Value<IList<ContentModels.Picture>>("Carousel"); //.Select(p => new Picture(p)).ToList();
     var i = 0;
+    var persons = Model.Root().Children.Where(x => x.IsDocumentType("people")).FirstOrDefault().Children;
+    var members = "";
+    var delimiter = "";
+    var currentUrl = UmbracoContext.CleanedUmbracoUrl.AbsoluteUri;
+    Uri currentUri = new Uri(currentUrl);
+    var baseUrl = $"{currentUri.Scheme}://{currentUri.Authority}";
+    @foreach (ContentModels.Person person in persons)
+    {
+        var protrait = (person.Photo != null) ? person.Photo.Url() : "/assets/images/personsiloet.jpg";
+        protrait = baseUrl + protrait;
+        members += delimiter;
+        members += "\t\t\t{\n";
+        members += "\t\t\t\t\"@type\": \"Person\",\n";
+        members += $"\t\t\t\t\"jobTitle\": \"{string.Join(", ", person.Value<string[]>("memberType"))}\",\n";
+        members += $"\t\t\t\t\"name\": \"{person.Name}\",\n";
+        members += $"\t\t\t\t\"telephone\": \"{person.Phone}\",\n";
+        members += $"\t\t\t\t\"email\": \"{person.Email}\",\n";
+        members += $"\t\t\t\t\"description\": \"{person.Elected}\",\n";
+        members += $"\t\t\t\t\"image\": \"{Html.Raw(protrait)}\"\n";
+        members += "\t\t\t}";
+        delimiter = ",\n";
+    }
 }
 <script type="application/ld+json">
     {
@@ -14,11 +36,14 @@
         "email": "tvingsbakken.bestyrelsen(at)gmail.com",
         "name": "Grundejerforeningen Tvingsbakken",
         "address": {
-        "@@type": "PostalAddress",
-        "streetAddress": "Tvingsbakken 29",
-        "postalCode": "3200",
-        "addressLocality": "Helsinge"
+            "@@type": "PostalAddress",
+            "streetAddress": "Tvingsbakken",
+            "postalCode": "3200",
+            "addressLocality": "Helsinge"
         },
+        "members": [
+@Html.Raw(members)
+        ],
         "logo": "https://www.tvingsbakken.org/assets/images/logo.svg"
     }
 </script>

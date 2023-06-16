@@ -1,4 +1,4 @@
-namespace tvingsbakken.org;
+namespace TBGF.Apps.Website;
 
 public class Program
 {

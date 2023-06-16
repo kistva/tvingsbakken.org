@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using tvingsbakken.org.Models;
+using TBGF.Apps.Website.Models;
 using Umbraco.Cms.Web.Common;
 using Umbraco.Cms.Web.Common.Controllers;
 
-namespace tvingsbakken.org.Controllers;
+namespace TBGF.Apps.Website.Controllers;
 
 [Route("api/blogs")]
 public class BlogsController : UmbracoApiController

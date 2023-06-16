@@ -1,6 +1,7 @@
 using SixLabors.ImageSharp.Web.DependencyInjection;
+using System.IO;
 
-namespace tvingsbakken.org;
+namespace TBGF.Apps.Website;
 
 public class Startup
 {
@@ -73,7 +74,7 @@ public class Startup
     /// </summary>
     /// <param name="app">The application builder.</param>
     /// <param name="env">The web hosting environment.</param>
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
         {
@@ -81,7 +82,7 @@ public class Startup
         }
 
         // Add caching on static files like .CSS .JS and .SVG and .WOFF2
-        app.Use(async (context, next) =>
+        _ = app.Use(async (context, next) =>
         {
 
             context.Response.Headers.Add("X-Xss-Protection", "1; mode=block");
@@ -102,8 +103,7 @@ public class Startup
             {
                 context.Response.Headers.Add("Cache-Control", "public, max-age=2592000");
             }
-
-            await next();
+            await next(context);
         });
 
         app.UseUmbraco()

@@ -1,4 +1,4 @@
-﻿namespace tvingsbakken.org.Models;
+﻿namespace TBGF.Apps.Website.Models;
 public class Blog
 {
     public DateTime PublishDate { get; set; }

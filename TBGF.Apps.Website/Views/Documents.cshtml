@@ -1,0 +1,53 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Documents>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+    Layout = "Master.cshtml";
+    //var numberOfPosts = 6;
+    var startNode = Umbraco.Content(Model.Id);
+
+    //Gets all documents to calculate pages
+    var documents = startNode.Children.ToList();
+
+    //Gets all documents to calculate pages
+    //var documents = Model.Children.Cast<ContentModels.Blog>().OrderByDescending(x => x.Value<DateTime>("publishDate")).ToList();
+    //var pageCount = (int)Math.Ceiling((double)documents.Count / (double)numberOfPosts);
+    //gets the page from the querystring and sets it to one if it is out of range
+    var page = 1;
+
+    //if (!string.IsNullOrEmpty(Context.Request.Query["page"]))
+    //{
+    //    int.TryParse(Context.Request.Query["page"], out page);
+    //    if (page <= 0 || page > pageCount)
+    //    {
+    //        page = 1;
+    //    }
+    //}
+    //var pagedocuments = documents.Skip((page - 1) * numberOfPosts).Take(numberOfPosts).ToList();
+
+}
+<section>
+    <div class="container">
+        @if (documents.Count > 0)
+        {
+            <div class="container shadow-flow">
+                <div class="row mar-bot5">
+                    <div class="cols-1">
+                        <div class="title">
+                            <h1 class="section-heading">@Html.Raw(Model.PageTitle)</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    @foreach (ContentModels.ContentPage post in documents)
+                    {
+                        <a href="@post.Url()" alt="@Html.Raw(post.BrowserTitle)">
+                           @Html.Raw(post.PageTitle)
+                        </a>
+                        <br />
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</section>

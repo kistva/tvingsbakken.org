@@ -532,13 +532,14 @@ header.minimized
     color: #327c2a;
     float: left;
     cursor: pointer;
-	width: 48px;
-	height: 48px;
+	width: 46px;
+	height: 46px;
 	text-align: center;
-	line-height:48px;
+	line-height:46px;
 	margin: 4px;
 	border:#217c03 solid 1px;
 	border-radius: 3px;
+	z-index: 1000;
   }
   .pagination li.inactive {
 	color: #ccc !important;

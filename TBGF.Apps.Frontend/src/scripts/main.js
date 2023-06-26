@@ -139,7 +139,7 @@ function Pagination() {
           console.log("click pre")
           prevPage();
         });
-        if(current_page)
+        if(current_page == 1)
           buttonPrev.classList.add('inactive');
 
         pageNumber.appendChild(buttonPrev)

@@ -7,7 +7,7 @@
 @{
     Layout = null;
     var home = (Home)Model.Root();
-    var currentUrl = UmbracoContext.CleanedUmbracoUrl.AbsoluteUri;
+    var currentUrl = UmbracoContext.OriginalRequestUrl.AbsoluteUri.ToLower();
     Uri currentUri = new Uri(currentUrl);
     var baseUrl = $"{currentUri.Scheme}://{currentUri.Authority}";
 

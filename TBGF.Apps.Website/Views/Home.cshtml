@@ -1,4 +1,5 @@
 ﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Newtonsoft.Json.Linq;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Home>
 @using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
 @{
@@ -6,46 +7,52 @@
     var carouselItems = Model.Value<IList<ContentModels.Picture>>("Carousel"); //.Select(p => new Picture(p)).ToList();
     var i = 0;
     var persons = Model.Root().Children.Where(x => x.IsDocumentType("people")).FirstOrDefault().Children;
-    var members = "";
+
     var delimiter = "";
     var currentUrl = UmbracoContext.CleanedUmbracoUrl.AbsoluteUri;
     Uri currentUri = new Uri(currentUrl);
     var baseUrl = $"{currentUri.Scheme}://{currentUri.Authority}";
+    var members = new JArray();
+
     @foreach (ContentModels.Person person in persons)
     {
+
         var protrait = (person.Photo != null) ? person.Photo.Url() : "/assets/images/personsiloet.jpg";
         protrait = baseUrl + protrait;
-        members += delimiter;
-        members += "\t\t\t{\n";
-        members += "\t\t\t\t\"@type\": \"Person\",\n";
-        members += $"\t\t\t\t\"jobTitle\": \"{string.Join(", ", person.Value<string[]>("memberType"))}\",\n";
-        members += $"\t\t\t\t\"name\": \"{person.Name}\",\n";
-        members += $"\t\t\t\t\"telephone\": \"{person.Phone}\",\n";
-        members += $"\t\t\t\t\"email\": \"{person.Email}\",\n";
-        members += $"\t\t\t\t\"description\": \"{person.Elected}\",\n";
-        members += $"\t\t\t\t\"image\": \"{Html.Raw(protrait)}\"\n";
-        members += "\t\t\t}";
-        delimiter = ",\n";
+        var member = new JObject(
+            new JProperty("@type", "Person"),
+            new JProperty("name", person.Name),
+            new JProperty("jobTitle", string.Join(", ", person.Value<string[]>("memberType"))),
+            new JProperty("telephone", person.Phone),
+            new JProperty("email", person.Email),
+            new JProperty("description", person.Elected),
+            new JProperty("image", protrait)
+        );
+        members.Add(member);
     }
+    var structuredData =
+    new JObject(
+        new JProperty("@context", "https://schema.org"),
+        new JProperty("@type", "Organization"),
+        new JProperty("logo", "https://www.tvingsbakken.org/assets/images/logo.svg"),
+        new JProperty("url", "https://tvingsbakken.org/"),
+        new JProperty("email", "https://tvingsbakken.org/"),
+        new JProperty("name", "https://tvingsbakken.org/"),
+        new JProperty("address", 
+            new JObject(
+                new JProperty("@type", "PostalAddress"),
+                new JProperty("streetAddress", "Tvingsbakken"),
+                new JProperty("postalCode", "3200"),
+                new JProperty("addressLocality", "Helsinge")
+            )
+        ),
+        new JProperty("members", members)
+    );
 }
+
+
 <script type="application/ld+json">
-    {
-        "@@context": "https://schema.org",
-        "@@type": "Organization",
-        "url": "https://tvingsbakken.org/",
-        "email": "tvingsbakken.bestyrelsen(at)gmail.com",
-        "name": "Grundejerforeningen Tvingsbakken",
-        "address": {
-            "@@type": "PostalAddress",
-            "streetAddress": "Tvingsbakken",
-            "postalCode": "3200",
-            "addressLocality": "Helsinge"
-        },
-        "members": [
-@Html.Raw(members)
-        ],
-        "logo": "https://www.tvingsbakken.org/assets/images/logo.svg"
-    }
+@Html.Raw(structuredData.ToString()),
 </script>
 <section>
     @foreach (var p in carouselItems)

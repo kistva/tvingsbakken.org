@@ -564,6 +564,10 @@ header.minimized
 	  color: #fff;
 	  opacity: 0.4;
   }
+  .pagination li a
+  {
+	text-decoration: none;
+  }
 
 /*==========================================================================
   Misc & Adjust 

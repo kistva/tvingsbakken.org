@@ -127,58 +127,59 @@ function Pagination() {
 
         total = numPages();
         let pageNumber = document.getElementById('page_number');
-
-        while (pageNumber.hasChildNodes()) {
-          pageNumber.removeChild(pageNumber.firstChild);
+        if(pageNumber != null)
+        {
+          while (pageNumber.hasChildNodes()) {
+            pageNumber.removeChild(pageNumber.firstChild);
+          }
+  
+          let buttonPrev = document.createElement('li');
+          buttonPrev.textContent = "<";
+          buttonPrev.id = "button-prev";
+          buttonPrev.addEventListener("click", function() {
+            console.log("click pre")
+            prevPage();
+          });
+          if(current_page == 1)
+            buttonPrev.classList.add('inactive');
+  
+          pageNumber.appendChild(buttonPrev)
+  
+          let paginationArray = setPagination();
+  
+          paginationArray.forEach((i) => {
+            let pageNumberBtn = document.createElement('li');
+            pageNumberBtn.textContent = i;
+  
+            if(i !== "...")
+            {
+              pageNumberBtn.classList.add("clickPageNumber");
+              pageNumberBtn.addEventListener("click", function(e) {
+                current_page = Number(e.target.textContent);
+                changePage(current_page);
+              });
+            }
+            else
+            {
+              pageNumberBtn.classList.add("noborder");
+            }
+  
+            if (i == current_page) {
+              pageNumberBtn.classList.add('active');
+            }
+            pageNumber.appendChild(pageNumberBtn)
+  
+          })
+          let buttonNext = document.createElement('li');
+          buttonNext.textContent = ">";
+          buttonNext.id = "button-next";
+          buttonNext.addEventListener("click", function() {
+            nextPage();
+          });
+          if(current_page == numPages())
+            buttonNext.classList.add('inactive');
+          pageNumber.appendChild(buttonNext)
         }
-
-        let buttonPrev = document.createElement('li');
-        buttonPrev.textContent = "<";
-        buttonPrev.id = "button-prev";
-        buttonPrev.addEventListener("click", function() {
-          console.log("click pre")
-          prevPage();
-        });
-        if(current_page == 1)
-          buttonPrev.classList.add('inactive');
-
-        pageNumber.appendChild(buttonPrev)
-
-        let paginationArray = setPagination();
-
-        paginationArray.forEach((i) => {
-          let pageNumberBtn = document.createElement('li');
-          pageNumberBtn.textContent = i;
-
-          if(i !== "...")
-          {
-            pageNumberBtn.classList.add("clickPageNumber");
-            pageNumberBtn.addEventListener("click", function(e) {
-              current_page = Number(e.target.textContent);
-              changePage(current_page);
-            });
-          }
-          else
-          {
-            pageNumberBtn.classList.add("noborder");
-          }
-
-          if (i == current_page) {
-            pageNumberBtn.classList.add('active');
-          }
-          pageNumber.appendChild(pageNumberBtn)
-
-        })
-
-        let buttonNext = document.createElement('li');
-        buttonNext.textContent = ">";
-        buttonNext.id = "button-next";
-        buttonNext.addEventListener("click", function() {
-          nextPage();
-        });
-        if(current_page == numPages())
-          buttonNext.classList.add('inactive');
-        pageNumber.appendChild(buttonNext)
 
     }
 

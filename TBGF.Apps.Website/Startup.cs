@@ -84,12 +84,10 @@ public class Startup
         // Add caching on static files like .CSS .JS and .SVG and .WOFF2
         _ = app.Use(async (context, next) =>
         {
-
-            context.Response.Headers.Add("X-Xss-Protection", "1; mode=block");
             context.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
             context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
             context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000");
-            context.Response.Headers.Add("Server", "");
+
             string path = context.Request.Path;
 
             if (path.StartsWith("/umbraco/") == false)

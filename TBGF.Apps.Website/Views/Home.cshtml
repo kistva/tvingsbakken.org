@@ -9,7 +9,7 @@
     var persons = Model.Root().Children.Where(x => x.IsDocumentType("people")).FirstOrDefault().Children;
 
     var delimiter = "";
-    var currentUrl = UmbracoContext.CleanedUmbracoUrl.AbsoluteUri;
+    var currentUrl = node.Site().Url;
     Uri currentUri = new Uri(currentUrl);
     var baseUrl = $"{currentUri.Scheme}://{currentUri.Authority}";
     var members = new JArray();
@@ -36,8 +36,8 @@
         new JProperty("@type", "Organization"),
         new JProperty("logo", "https://www.tvingsbakken.org/assets/images/logo.svg"),
         new JProperty("url", "https://tvingsbakken.org/"),
-        new JProperty("email", "https://tvingsbakken.org/"),
-        new JProperty("name", "https://tvingsbakken.org/"),
+        new JProperty("email", "tvingsbakken.bestyrelsen@gmail.com"),
+        new JProperty("name", "Grundejerforeningen Tvingsbakken"),
         new JProperty("address", 
             new JObject(
                 new JProperty("@type", "PostalAddress"),
@@ -52,7 +52,7 @@
 
 
 <script type="application/ld+json">
-@Html.Raw(structuredData.ToString()),
+@Html.Raw(structuredData.ToString())
 </script>
 <section>
     @foreach (var p in carouselItems)

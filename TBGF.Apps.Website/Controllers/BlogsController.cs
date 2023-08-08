@@ -37,7 +37,7 @@ public class BlogsController : UmbracoApiController
                 Title = blog?.Value<string>("pageTitle") ?? "",
                 AltTitle = blog?.Value<string>("browserTitle") ?? "",
                 Text = blog?.Value<string>("excerpt") ?? "",
-                Url = blog.Url() ?? ""
+                Url = blog?.Url() ?? ""
             };
             result.Result.Add(blogItem);
         }

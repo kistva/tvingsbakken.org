@@ -58,7 +58,7 @@ public class Startup
                     }
                 }
 
-                bool doesntWantFormat = c.Commands.TryGetValue("noformat", out string value);
+                bool doesntWantFormat = c.Commands.TryGetValue("noformat", out var value);
 
                 if (doesntWantFormat)
                 {
